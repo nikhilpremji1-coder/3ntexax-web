@@ -13,10 +13,22 @@ const outfit = Outfit({
   variable: "--font-sans",
 });
 
-export const metadata: Metadata = {
-  title: "3N TEXAS",
-  description: "Real Estate & Portfolio Management",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+
+  return {
+    title: {
+      default: settings?.site_name || "3N TEXAS",
+      template: `%s | ${settings?.site_name || "3N TEXAS"}`,
+    },
+    description: settings?.seo?.home?.description || "Real Estate & Portfolio Management",
+    icons: {
+      icon: settings?.site_favicon || undefined,
+      shortcut: settings?.site_favicon || undefined,
+      apple: settings?.site_favicon || undefined,
+    },
+  };
+}
 
 import { getSettings } from "@/lib/api";
 

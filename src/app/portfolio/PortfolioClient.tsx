@@ -80,11 +80,31 @@ export default function PortfolioClient() {
             <PageHeader title="Our Portfolio" breadcrumb="Portfolio" />
 
             <section className="py-20 container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {projects.map((item, index) => (
-                        <ProjectCard key={`${item.id}-${index}`} item={item} index={index} />
-                    ))}
-                </div>
+                {loading && projects.length === 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {Array.from({ length: 9 }).map((_, i) => (
+                            <div key={i} className="h-[400px] bg-neutral-900 rounded-2xl border border-white/5 relative overflow-hidden">
+                                <Skeleton className="absolute inset-0 w-full h-full" />
+                            </div>
+                        ))}
+                    </div>
+                ) : !loading && projects.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-20 text-center">
+                        <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
+                            <MapPin className="w-10 h-10 text-slate-400" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">No Projects Found</h3>
+                        <p className="text-slate-600 dark:text-slate-400 max-w-md">
+                            We currently don't have any projects to display here. Please check back later or explore other sections.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {projects.map((item, index) => (
+                            <ProjectCard key={`${item.id}-${index}`} item={item} index={index} />
+                        ))}
+                    </div>
+                )}
                 
                 {/* Infinite Scroll Loader */}
                 <div ref={observerTarget} className="py-12">
